@@ -566,10 +566,16 @@
         // === نظام التنقل المحدث (يمنع الدخول للأقسام الأخرى) ===
         function switchScreen(screenId, btnElement) {
             // تفعيل رسالة القفل إذا حاول الدخول لأي قسم غير الرئيسية
-            if(screenId === 'screen-guilds' || screenId === 'screen-rounds' || screenId === 'screen-standings') {
-                alert('القسم مغلق لحتى انتهاء اللغز 🔒');
-                return;
-            }
+            function switchScreen(screenId, btnElement) {
+    // تم إلغاء القفل بنجاح وعادت الساحات للعمل 🔥
+
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+    btnElement.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));

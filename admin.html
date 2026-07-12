@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة الجلادين | Hell Cup</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+
+        :root {
+            --bg-dark: #050101;
+            --bg-panel: #140303;
+            --magma: #ff2a00;
+            --magma-glow: #ff7700;
+            --text-light: #fbeeee;
+            --text-muted: #a68484;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: radial-gradient(circle at center, #2a0505 0%, var(--bg-dark) 100%);
+        }
+
+        /* === شاشة تسجيل الدخول === */
+        #login-screen {
+            background: rgba(20, 3, 3, 0.8);
+            border: 2px solid var(--magma);
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(255, 42, 0, 0.3);
+            width: 90%;
+            max-width: 400px;
+        }
+        #login-screen h2 { color: var(--magma-glow); margin-bottom: 20px; font-size: 2rem; }
+        .input-group { margin-bottom: 20px; }
+        .input-group input {
+            width: 100%; padding: 15px; border-radius: 8px; border: 1px solid var(--magma);
+            background: #000; color: white; text-align: center; font-size: 1.1rem; outline: none;
+        }
+        .input-group input:focus { box-shadow: 0 0 15px rgba(255, 42, 0, 0.5); }
+        .btn-hell {
+            background: linear-gradient(135deg, #7a0000, #ba1100);
+            color: white; border: 1px solid var(--magma-glow); padding: 12px 30px;
+            font-size: 1.1rem; font-weight: bold; border-radius: 8px; cursor: pointer;
+            width: 100%; transition: 0.3s;
+        }
+        .btn-hell:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(255, 119, 0, 0.4); }
+
+        /* === لوحة التحكم (مخفية بالبداية) === */
+        #admin-dashboard {
+            display: none; width: 100%; max-width: 1000px; height: 100vh; overflow-y: auto; padding: 30px 20px;
+        }
+        .dashboard-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px dashed var(--magma); padding-bottom: 15px; margin-bottom: 30px;
+        }
+        .dashboard-header h1 { color: var(--magma-glow); }
+        .logout-btn { background: transparent; border: 1px solid #ff0055; color: #ff0055; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+
+        .admin-section { background: var(--bg-panel); border: 1px solid rgba(255,42,0,0.3); border-radius: 12px; padding: 25px; margin-bottom: 30px; }
+        .admin-section h3 { color: #ffcc00; margin-bottom: 20px; font-size: 1.5rem; border-right: 4px solid var(--magma); padding-right: 10px; }
+        
+        .grid-forms { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .team-row { background: #000; padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); }
+        .team-name { font-size: 1.2rem; font-weight: bold; color: var(--text-light); margin-bottom: 10px; display: block;}
+        
+        .inputs-flex { display: flex; gap: 10px; }
+        .inputs-flex div { flex: 1; text-align: center; }
+        .inputs-flex label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px; }
+        .inputs-flex input { width: 100%; padding: 8px; border-radius: 5px; background: #1a0505; border: 1px solid var(--magma); color: white; text-align: center; }
+
+        .match-row { background: #000; padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; }
+        .match-title { color: var(--magma-glow); font-weight: bold; margin-bottom: 10px; }
+        .match-inputs { display: flex; flex-direction: column; gap: 10px; }
+        .match-inputs input { width: 100%; padding: 10px; border-radius: 5px; background: #1a0505; border: 1px solid var(--border-fire); color: white; }
+
+        .save-bar { position: sticky; bottom: 20px; background: rgba(0,0,0,0.9); padding: 15px; border-radius: 12px; border: 1px solid var(--magma); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 -10px 30px rgba(0,0,0,0.8); }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <h2>بوابة الجلادين ⚖️</h2>
+        <p style="color:var(--text-muted); margin-bottom: 20px;">أدخل رمز المرور السري للعبور.</p>
+        <div class="input-group">
+            <input type="password" id="admin-pass" placeholder="•••••••••">
+        </div>
+        <button class="btn-hell" onclick="checkLogin()">دخول 🚪</button>
+        <p id="error-msg" style="color:#ff0055; margin-top:15px; display:none;">الرمز خاطئ، ستحترق إن حاولت مجدداً!</p>
+    </div>
+
+    <div id="admin-dashboard">
+        <div class="dashboard-header">
+            <h1>غرفة التحكم المركزية 🔥</h1>
+            <button class="logout-btn" onclick="location.reload()">تسجيل الخروج ✖</button>
+        </div>
+
+        <div class="admin-section">
+            <h3>نقاط دوري المجموعات</h3>
+            <div id="standings-forms" class="grid-forms"></div>
+        </div>
+
+        <div class="admin-section">
+            <h3>حالة ومواعيد المواجهات</h3>
+            <div id="matches-forms"></div>
+        </div>
+
+        <div class="save-bar">
+            <span style="color:var(--text-muted); font-size:0.9rem;">تأكد من مراجعة الأرقام قبل الحفظ.</span>
+            <button class="btn-hell" style="width:auto; padding:10px 40px; background: #26b48a; border-color: white;" onclick="saveAllData()">حفظ ونشر التعديلات ✅</button>
+        </div>
+    </div>
+
+    <script>
+        // === كلمة السر المخفية في السكربت ===
+        const SECRET_KEY = "m0780586447@K";
+
+        // === البيانات الافتراضية (في حال كان الموقع جديداً تماماً) ===
+        const defaultData = {
+            standings: {
+                A: [
+                    { id: 'ALDAMA', name: 'الداما', emoji: '🥂', w: 0, d: 0, l: 0 },
+                    { id: 'BALERION', name: 'باليريون', emoji: '📯', w: 0, d: 0, l: 0 },
+                    { id: 'SUNLIGHT', name: 'سونلايت', emoji: '🏮', w: 0, d: 0, l: 0 },
+                    { id: 'VALHALLA', name: 'فالهالا', emoji: '🔱', w: 0, d: 0, l: 0 }
+                ],
+                B: [
+                    { id: 'SIRIUS', name: 'سيريوس', emoji: '🏹', w: 0, d: 0, l: 0 },
+                    { id: 'DRIFT', name: 'دريفت', emoji: '🎻', w: 0, d: 0, l: 0 },
+                    { id: 'CLOVER', name: 'كلوفر', emoji: '⚔️♣️', w: 0, d: 0, l: 0 },
+                    { id: 'HADES', name: 'هاديس', emoji: '💠', w: 0, d: 0, l: 0 }
+                ]
+            },
+            matches: [
+                { id: 'm1', group: 'A', round: 1, t1: 'الداما', em1:'🥂', t2: 'باليريون', em2:'📯', time: 'لم تلعب بعد', status: 'بانتظار الإشارة ⚔️' },
+                { id: 'm2', group: 'A', round: 1, t1: 'سونلايت', em1:'🏮', t2: 'فالهالا', em2:'🔱', time: 'لم تلعب بعد', status: 'بانتظار الإشارة ⚔️' },
+                { id: 'm3', group: 'A', round: 2, t1: 'الداما', em1:'🥂', t2: 'سونلايت', em2:'🏮', time: 'لم تلعب بعد', status: 'بانتظار الإشارة ⚔️' },
+                { id: 'm4', group: 'A', round: 2, t1: 'باليريون', em1:'📯', t2: 'فالهالا', em2:'🔱', time: 'لم تلعب بعد', status: 'بانتظار الإشارة ⚔️' },
+                { id: 'm5', group: 'A', round: 3, t1: 'الداما', em1:'🥂', t2: 'فالهالا', em2:'🔱', time: 'لم تلعب بعد', status: 'بانتظار الإشارة ⚔️' },
+                { id: 'm6', group: 'A', round: 3, t1: 'باليريون', em1:'📯', t2: 'سونلايت', em2:'🏮', time: 'لم تلعب بعد', status: 'بانتظار الإشارة ⚔️' },
+                { id: 'm7', group: 'B', round: 1, t1: 'سيريوس', em1:'🏹', t2: 'دريفت', em2:'🎻', time: 'لم تلعب بعد', status: 'بانتظار الإشارة ⚔️' },
+                { id: 'm8', group: 'B', round: 1, t1: 'كلوفر', em1:'⚔️♣️', t2: 'هاديس', em2:'💠', time: 'لم تلعب بعد', status: 'بانتظار الإشارة ⚔️' },
+                { id: 'm9', group: 'B', round: 2, t1: 'سيريوس', em1:'🏹', t2: 'كلوفر', em2:'⚔️♣️', time: 'لم تلعب بعد', status: 'بانتظار الإشارة ⚔️' },
+                { id: 'm10', group: 'B', round: 2, t1: 'دريفت', em1:'🎻', t2: 'هاديس', em2:'💠', time: 'لم تلعب بعد', status: 'بانتظار الإشارة ⚔️' },
+                { id: 'm11', group: 'B', round: 3, t1: 'سيريوس', em1:'🏹', t2: 'هاديس', em2:'💠', time: 'لم تلعب بعد', status: 'بانتظار الإشارة ⚔️' },
+                { id: 'm12', group: 'B', round: 3, t1: 'دريفت', em1:'🎻', t2: 'كلوفر', em2:'⚔️♣️', time: 'لم تلعب بعد', status: 'بانتظار الإشارة ⚔️' }
+            ]
+        };
+
+        let db = JSON.parse(localStorage.getItem('hellCupDB')) || defaultData;
+
+        // التحقق من الدخول
+        function checkLogin() {
+            const pass = document.getElementById('admin-pass').value;
+            if(pass === SECRET_KEY) {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('admin-dashboard').style.display = 'block';
+                buildDashboard();
+            } else {
+                document.getElementById('error-msg').style.display = 'block';
+            }
+        }
+
+        // بناء حقول التعديل
+        function buildDashboard() {
+            // 1. بناء حقول ترتيب الفرق
+            let standingsHtml = '';
+            ['A', 'B'].forEach(group => {
+                db.standings[group].forEach((team, index) => {
+                    standingsHtml += `
+                    <div class="team-row">
+                        <span class="team-name">${team.emoji} ${team.name} (المجموعة ${group})</span>
+                        <div class="inputs-flex">
+                            <div><label>فاز</label><input type="number" id="w_${group}_${index}" value="${team.w}"></div>
+                            <div><label>تعادل</label><input type="number" id="d_${group}_${index}" value="${team.d}"></div>
+                            <div><label>خسر</label><input type="number" id="l_${group}_${index}" value="${team.l}"></div>
+                        </div>
+                    </div>`;
+                });
+            });
+            document.getElementById('standings-forms').innerHTML = standingsHtml;
+
+            // 2. بناء حقول المواجهات
+            let matchesHtml = '<div class="grid-forms">';
+            db.matches.forEach((match, index) => {
+                matchesHtml += `
+                <div class="match-row">
+                    <div class="match-title">المجموعة ${match.group} - الجولة ${match.round}: ${match.t1} ضد ${match.t2}</div>
+                    <div class="match-inputs">
+                        <input type="text" id="time_${index}" value="${match.time}" placeholder="مثال: اليوم 9:00 مساءً">
+                        <input type="text" id="status_${index}" value="${match.status}" placeholder="مثال: بانتظار الإشارة">
+                    </div>
+                </div>`;
+            });
+            matchesHtml += '</div>';
+            document.getElementById('matches-forms').innerHTML = matchesHtml;
+        }
+
+        // حفظ التعديلات وإرسالها لقاعدة البيانات المحلية
+        function saveAllData() {
+            // حفظ الدوري
+            ['A', 'B'].forEach(group => {
+                db.standings[group].forEach((team, index) => {
+                    team.w = parseInt(document.getElementById(`w_${group}_${index}`).value) || 0;
+                    team.d = parseInt(document.getElementById(`d_${group}_${index}`).value) || 0;
+                    team.l = parseInt(document.getElementById(`l_${group}_${index}`).value) || 0;
+                });
+            });
+
+            // حفظ المواجهات
+            db.matches.forEach((match, index) => {
+                match.time = document.getElementById(`time_${index}`).value;
+                match.status = document.getElementById(`status_${index}`).value;
+            });
+
+            // تحديث LocalStorage
+            localStorage.setItem('hellCupDB', JSON.stringify(db));
+            
+            alert("🔥 تم حفظ التعديلات بنجاح! افتح صفحة الموقع الأساسية لترى التحديثات.");
+        }
+
+        // دعم الضغط على Enter في تسجيل الدخول
+        document.getElementById('admin-pass').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') checkLogin();
+        });
+    </script>
+</body>
+</html>

@@ -5,14 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Hell Cup | كأس الجحيم</title>
     <style>
+        /* استدعاء خط القاهرة الفاخر وخط سينزل التاريخي */
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Cinzel:wght@700;900&display=swap');
-        :root { --bg-darkest: #050101; --bg-panel: #140303; --magma-core: #ff2a00; --magma-glow: #ff7700; --magma-bright: #ffcc00; --text-light: #fbeeee; --text-muted: #a68484; --success: #26b48a; --danger: #ff0055; --border-fire: rgba(255, 42, 0, 0.25); --transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        
+        :root { 
+            --bg-darkest: #050101; 
+            --bg-panel: #140303; 
+            --magma-core: #ff2a00; 
+            --magma-glow: #ff7700; 
+            --magma-bright: #ffcc00; 
+            --text-light: #fbeeee; 
+            --text-muted: #a68484; 
+            --success: #26b48a; 
+            --danger: #ff0055; 
+            --border-fire: rgba(255, 42, 0, 0.25); 
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+        
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        body { background-color: var(--bg-darkest); color: var(--text-light); min-height: 100vh; overflow-x: hidden; background-image: radial-gradient(circle at 50% 100%, #300500 0%, var(--bg-darkest) 70%); background-attachment: fixed; display: flex; flex-direction: column; }
+        
+        body { 
+            background-color: var(--bg-darkest); color: var(--text-light); min-height: 100vh; overflow-x: hidden; 
+            background-image: radial-gradient(circle at 50% 100%, #300500 0%, var(--bg-darkest) 70%); 
+            background-attachment: fixed; display: flex; flex-direction: column; 
+        }
+        
         .hell-title { font-family: 'Cinzel', serif; letter-spacing: 2px; }
+        
+        /* مؤثرات الحمم المتطايرة */
         .embers { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
         .ember { position: absolute; background: linear-gradient(to top, var(--magma-core), var(--magma-bright)); border-radius: 50%; opacity: 0; animation: riseUp 6s infinite linear; filter: blur(1px); }
         @keyframes riseUp { 0% { opacity: 0; transform: translateY(105vh) translateX(0) scale(0.5); } 20% { opacity: 0.8; } 80% { opacity: 0.4; } 100% { opacity: 0; transform: translateY(-10vh) translateX(50px) scale(1.3); } }
+        
+        /* شاشة التحميل */
         #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-darkest); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, #1a0300 0%, var(--bg-darkest) 100%); transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s; }
         #loader.hidden { opacity: 0; visibility: hidden; }
         .loader-shield { font-size: 5rem; animation: shieldPulse 1.5s infinite alternate; filter: drop-shadow(0 0 20px var(--magma-core)); margin-bottom: 25px; line-height: 1; }
@@ -20,35 +45,26 @@
         .loader-bar-thick { width: 260px; height: 14px; background: rgba(0,0,0,0.6); border-radius: 30px; padding: 2px; overflow: hidden; border: 1px solid rgba(255,42,0,0.2); box-shadow: 0 0 15px rgba(0,0,0,0.5); }
         .loader-fill-lava { width: 0%; height: 100%; background: linear-gradient(90deg, var(--magma-core), var(--magma-glow), var(--magma-bright)); border-radius: 30px; animation: lavaFlow 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; box-shadow: 0 0 15px var(--magma-glow); }
         @keyframes lavaFlow { 100% { width: 100%; } }
+        
+        /* شريط التنقل المتجاوب */
         header { position: fixed; top: 0; width: 100%; background: rgba(5, 1, 1, 0.92); backdrop-filter: blur(12px); border-bottom: 2px solid var(--border-fire); z-index: 100; padding: 12px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
         .logo-area { font-size: 1.5rem; font-weight: 900; color: var(--magma-bright); text-shadow: 0 0 12px var(--magma-core); display: flex; align-items: center; gap: 10px; text-decoration: none;}
         .logo-image { height: 40px; width: auto; object-fit: contain; filter: drop-shadow(0 0 8px var(--magma-core)); }
-        nav { display: flex; gap: 10px; overflow-x: auto; white-space: nowrap; max-width: 70%; padding: 5px 0; scrollbar-width: none; }
+        
+        nav { display: flex; gap: 10px; overflow-x: auto; white-space: nowrap; max-width: 70%; padding: 5px 0; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
         nav::-webkit-scrollbar { display: none; }
         nav button { background: rgba(255, 42, 0, 0.04); border: 1px solid rgba(255,42,0,0.1); color: var(--text-light); font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: var(--transition); padding: 8px 15px; border-radius: 6px; }
         nav button:hover, nav button.active { background: linear-gradient(135deg, rgba(255,42,0,0.15), rgba(255,119,0,0.05)); color: var(--magma-bright); border-color: var(--magma-glow); box-shadow: 0 0 15px rgba(255,42,0,0.2); }
+        
+        /* نظام الشاشات */
         .screen { flex: 1; width: 100%; max-width: 1200px; margin: 0 auto; padding: 110px 20px 40px 20px; z-index: 10; display: none; flex-direction: column; opacity: 0; }
-        .screen.active { display: flex; opacity: 1; animation: screenFadeIn 0.7s forwards; }
+        .screen.active { display: flex; opacity: 1; animation: screenFadeIn 0.6s forwards; }
         @keyframes screenFadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
         .section-title { text-align: center; font-size: 2.2rem; font-weight: 900; color: var(--magma-bright); margin-bottom: 45px; text-shadow: 0 0 15px var(--magma-core); position: relative; }
         .section-title::after { content: ''; display: block; width: 100px; height: 3px; background: linear-gradient(90deg, transparent, var(--magma-core), transparent); margin: 12px auto 0; box-shadow: 0 0 10px var(--magma-glow); }
         
-        .carousel-outer { position: relative; width: 100%; max-width: 950px; margin: 0 auto 50px auto; padding: 0 50px; overflow: hidden; }
-        .carousel-window { width: 100%; overflow: hidden; cursor: grab; }
-        .carousel-window:active { cursor: grabbing; }
-        .carousel-track { display: flex; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); gap: 30px; }
-        .carousel-slide { flex: 0 0 100%; display: flex; flex-direction: column; align-items: center; }
-        .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(20, 3, 3, 0.85); border: 1px solid var(--border-fire); color: var(--magma-bright); font-size: 1.6rem; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); z-index: 10; box-shadow: 0 0 15px rgba(0,0,0,0.6); }
-        .carousel-btn:hover { background: var(--magma-core); color: white; border-color: var(--magma-bright); box-shadow: 0 0 20px var(--magma-glow); }
-        .c-prev { right: 0; } .c-next { left: 0; }
-        .staff-section-title { font-size: 1.6rem; font-weight: 900; color: var(--magma-glow); margin-bottom: 25px; text-shadow: 0 0 10px rgba(255,119,0,0.2); }
-        .staff-grid { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; width: 100%; }
-        .staff-card { background: linear-gradient(180deg, var(--bg-panel), #050101); border: 1px solid var(--border-fire); border-radius: 12px; padding: 20px; width: 200px; text-align: center; transition: var(--transition); box-shadow: inset 0 0 15px rgba(0,0,0,0.6); }
-        .staff-card:hover { transform: translateY(-5px); border-color: var(--magma-bright); box-shadow: 0 10px 25px rgba(255, 42, 0, 0.25); }
-        .staff-avatar { width: 65px; height: 60px; border-radius: 50%; border: 2px solid var(--magma-core); margin: 0 auto 12px auto; overflow: hidden; background: #000; display:flex; align-items:center; justify-content:center; font-size: 1.6rem; box-shadow: 0 0 10px var(--magma-core); }
-        .staff-avatar img { width: 100%; height: 100%; object-fit: cover; }
-        .staff-name { font-size: 1.1rem; font-weight: 900; color: white; margin-bottom: 4px; }
-        .staff-role { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
+        /* شرح الكأس والمجالات */
         .explanation-container { width: 100%; max-width: 950px; margin: 0 auto; }
         .exp-card { background: rgba(20, 3, 3, 0.5); border: 1px solid var(--border-fire); border-radius: 12px; padding: 35px; margin-bottom: 30px; border-top: 4px solid var(--magma-core); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .exp-card h3 { color: var(--magma-bright); font-size: 1.35rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
@@ -57,17 +73,23 @@
         .exp-card li { position: relative; padding-right: 20px; margin-bottom: 8px; color: var(--text-muted); }
         .exp-card li::before { content: '🔺'; position: absolute; right: 0; top: 2px; font-size: 0.75rem; color: var(--magma-core); }
         .note-box { background: rgba(255, 119, 0, 0.08); border-right: 4px solid var(--magma-glow); padding: 15px; border-radius: 4px; color: var(--magma-bright); font-size: 0.95rem; margin-top: 15px; line-height: 1.6; }
+        
         .fields-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; margin-top: 25px; }
         .field-item { background: var(--bg-panel); border: 1px solid var(--border-fire); padding: 14px 10px; border-radius: 8px; text-align: center; color: var(--text-light); font-weight: 700; font-size: 0.95rem; transition: var(--transition); border-bottom: 2px solid var(--magma-core); cursor: default; }
-        .field-item:hover { background: rgba(255,42,0,0.12); border-color: var(--magma-bright); transform: scale(1.05); color: var(--magma-bright); box-shadow: 0 5px 15px rgba(255,42,0,0.15); }
+        .field-item:hover { background: rgba(255,42,0,0.12); border-color: var(--magma-bright); transform: scale(1.05); color: var(--magma-bright); }
+        
+        /* قسم النقابات المشاركة */
         .guilds-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 20px; max-width: 900px; margin: 0 auto; }
         .guild-card { background: linear-gradient(180deg, var(--bg-panel), #050101); border: 1px solid var(--border-fire); border-radius: 12px; padding: 25px 10px; text-align: center; box-shadow: inset 0 0 15px rgba(0,0,0,0.6); display: flex; flex-direction: column; align-items: center; justify-content: center; transition: var(--transition);}
-        .guild-card:hover { transform: translateY(-5px); border-color: var(--magma-bright); box-shadow: 0 10px 25px rgba(255, 42, 0, 0.25); }
+        .guild-card:hover { transform: translateY(-4px); border-color: var(--magma-bright); box-shadow: 0 10px 25px rgba(255, 42, 0, 0.25); }
         .guild-logo-container { width: 75px; height: 75px; margin: 0 auto 15px auto; border-radius: 50%; border: 2px solid var(--magma-core); display:flex; align-items:center; justify-content:center; box-shadow: 0 0 15px rgba(255,42,0,0.2); background: #000;}
         .guild-name { font-size: 1.1rem; font-weight: 900; color: var(--text-light); }
+        
+        /* المواجهات */
         .rounds-container { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 850px; margin: 0 auto;}
         .grp-header { color: var(--magma-bright); text-align: center; font-size: 1.6rem; margin: 35px 0 15px 0; border-bottom: 2px dashed var(--border-fire); padding-bottom: 12px; font-family: 'Cinzel', serif;}
         .rnd-badge { color: var(--text-light); font-size: 1.15rem; font-weight: 700; margin: 15px 0 5px 0; border-right: 4px solid var(--magma-core); padding-right: 12px; }
+        
         .match-card { background: linear-gradient(90deg, var(--bg-panel) 0%, #050101 50%, var(--bg-panel) 100%); border: 1px solid var(--border-fire); border-radius: 12px; overflow: hidden; box-shadow: 0 12px 24px rgba(0,0,0,0.6); transition: var(--transition); position: relative;}
         .match-card:hover { border-color: var(--magma-glow); transform: scale(1.01); }
         .match-card::after { content:''; position: absolute; top:0; left:50%; transform:translateX(-50%); width: 1px; height: 100%; background: linear-gradient(to bottom, transparent, var(--border-fire), transparent); pointer-events: none;}
@@ -78,6 +100,8 @@
         .vs-sign { flex: 0.2; text-align: center; font-size: 1.6rem; color: var(--magma-bright); text-shadow: 0 0 15px var(--magma-core); font-weight: 900; }
         .match-footer { background: rgba(0,0,0,0.7); padding: 12px 20px; border-top: 1px solid rgba(255,255,255,0.03); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;}
         .match-status-label { font-weight: 700; font-size: 0.85rem; padding: 5px 16px; border-radius: 30px; background: rgba(255, 119, 0, 0.08); color: var(--magma-glow); border: 1px solid var(--magma-glow); }
+        
+        /* الدوري والترتيب */
         .table-area { overflow-x: auto; background: rgba(20,3,3,0.4); border-radius: 12px; border: 1px solid var(--border-fire); box-shadow: 0 15px 35px rgba(0,0,0,0.7); margin-bottom: 45px;}
         .standings-table { width: 100%; border-collapse: collapse; text-align: center; min-width: 600px; }
         .standings-table th { background: rgba(255, 42, 0, 0.12); color: var(--magma-bright); padding: 16px; font-size: 1.05rem; border-bottom: 2px solid var(--magma-core); font-weight: 900; }
@@ -86,7 +110,9 @@
         .team-row-cell { display: flex; align-items: center; gap: 12px; justify-content: right; text-align: right; padding-right: 20px; }
         .team-mini-badge { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--magma-core); background: #000; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
         .points-col { color: var(--magma-bright); font-size: 1.2rem; font-family: 'Cinzel', serif; font-weight: 900; }
-        .locked-fullscreen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; text-align: center; }
+        
+        /* الشاشات المقفلة والصيانة */
+        .locked-fullscreen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px; text-align: center; }
         .locked-icon { font-size: 5.5rem; filter: drop-shadow(0 0 20px var(--magma-core)); animation: shieldPulse 2s infinite alternate; margin-bottom: 20px; }
         
         /* التجاوب مع الجوال */
@@ -97,14 +123,6 @@
             nav button { padding: 6px 14px; font-size: 0.85rem; border-radius: 5px; }
             .screen { padding: 145px 12px 30px 12px; }
             .section-title { font-size: 1.7rem; margin-bottom: 30px; }
-            .carousel-outer { padding: 0 22px; margin-bottom: 35px; }
-            .carousel-btn { width: 32px; height: 32px; font-size: 1.1rem; }
-            .staff-section-title { font-size: 1.3rem; margin-bottom: 18px; }
-            .staff-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .staff-card { padding: 14px 8px; }
-            .staff-avatar { width: 52px; height: 48px; font-size: 1.3rem; }
-            .staff-name { font-size: 0.9rem; }
-            .staff-role { font-size: 0.75rem; }
             .guilds-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
             .guild-card { padding: 18px 8px; }
             .guild-logo-container { width: 62px; height: 62px; margin-bottom: 10px; }
@@ -121,7 +139,7 @@
             .vs-sign { font-size: 1.3rem; }
             .match-footer { padding: 10px 12px; font-size: 0.75rem; flex-direction: column; text-align: center; gap: 6px; }
         }
-        @media (max-width: 380px) { .fields-grid { grid-template-columns: repeat(2, 1fr); } .guilds-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; } .staff-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; } }
+        @media (max-width: 380px) { .fields-grid { grid-template-columns: repeat(2, 1fr); } .guilds-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; } }
         .global-footer { text-align: center; padding: 30px 15px 20px 15px; background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 100%); width: 100%; margin-top: auto; border-top: 1px solid rgba(255,42,0,0.05); }
         .dev-credit { color: var(--text-muted); font-size: 0.9rem; transition: var(--transition); }
         .dev-credit span { color: var(--magma-core); font-weight: 900; }
@@ -129,58 +147,28 @@
 </head>
 <body>
     <audio id="clickSound" src="click.mp3" preload="auto"></audio>
+    
     <div id="loader">
         <div class="loader-shield">🛡️</div>
         <h1 class="loader-title hell-title" style="color: white; font-size: 2.2rem; margin-bottom: 15px; text-shadow: 0 0 10px var(--magma-core);">HELL CUP</h1>
         <div class="loader-bar-thick"><div class="loader-fill-lava"></div></div>
     </div>
+    
     <div class="embers" id="embers-container"></div>
+    
     <header>
         <a href="#" class="logo-area hell-title"><img src="hell-logo.png" alt="Logo" class="logo-image" onerror="this.style.display='none'"> HELL CUP</a>
         <nav>
-            <button class="nav-btn active sound-btn" onclick="switchScreen('screen-home', this)">الرئيسية</button>
-            <button class="nav-btn sound-btn" onclick="switchScreen('screen-explanation', this)">شرح الكأس</button>
+            <button class="nav-btn active sound-btn" onclick="switchScreen('screen-explanation', this)">شرح الكأس</button>
             <button class="nav-btn sound-btn" onclick="switchScreen('screen-guilds', this)">النقابات</button>
             <button class="nav-btn sound-btn" onclick="switchScreen('screen-rounds', this)">المواجهات</button>
             <button class="nav-btn sound-btn" onclick="switchScreen('screen-standings', this)">الدوري</button>
             <button class="nav-btn sound-btn" onclick="switchScreen('screen-royal', this)">الحسبة الملكية</button>
+            <button class="nav-btn sound-btn" onclick="switchScreen('screen-home', this)">الرئيسية</button>
         </nav>
     </header>
 
-    <div id="screen-home" class="screen active">
-        <h2 class="section-title">مجالس قاعة الرماد 📜</h2>
-        <div class="carousel-outer">
-            <button class="carousel-btn c-prev sound-btn" onclick="moveCarousel(-1)">❯</button>
-            <div class="carousel-window" id="carouselWindow">
-                <div class="carousel-track" id="carouselTrack">
-                    <div class="carousel-slide">
-                        <h3 class="staff-section-title">المنظمون 🛡️</h3>
-                        <div class="staff-grid">
-                            <div class="staff-card"><div class="staff-avatar"><img src="marco.png" onerror="this.parentElement.innerHTML='💻'"></div><div class="staff-name">ماركو 🛡️</div><div class="staff-role">المنظم البرمجي</div></div>
-                            <div class="staff-card"><div class="staff-avatar"><img src="lovelando.png" onerror="this.parentElement.innerHTML='👑'"></div><div class="staff-name">لوفيلاندو 🛡️</div><div class="staff-role">منظم عام</div></div>
-                            <div class="staff-card"><div class="staff-avatar"><img src="chrollo.png" onerror="this.parentElement.innerHTML='👑'"></div><div class="staff-name">كرولو 🛡️</div><div class="staff-role">منظم عام</div></div>
-                            <div class="staff-card"><div class="staff-avatar"><img src="yoruichi.png" onerror="this.parentElement.innerHTML='👑'"></div><div class="staff-name">يوريتشي 🛡️</div><div class="staff-role">منظم عام</div></div>
-                        </div>
-                    </div>
-                    <div class="carousel-slide">
-                        <h3 class="staff-section-title">لجنة التقييم ⚖️ 🛡️</h3>
-                        <div class="staff-grid">
-                            <div class="staff-card"><div class="staff-avatar">⚖️</div><div class="staff-name">كرولو ⚖️ 🛡️</div><div class="staff-role">مقيّم معتمد</div></div>
-                            <div class="staff-card"><div class="staff-avatar">⚖️</div><div class="staff-name">يوري ⚖️ 🛡️</div><div class="staff-role">مقيّم معتمد</div></div>
-                            <div class="staff-card"><div class="staff-avatar">⚖️</div><div class="staff-name">لوفيلاندو ⚖️ 🛡️</div><div class="staff-role">مقيّم معتمد</div></div>
-                            <div class="staff-card"><div class="staff-avatar">⚖️</div><div class="staff-name">النصل الشمالي ⚖️ 🛡️</div><div class="staff-role">مقيّم معتمد</div></div>
-                            <div class="staff-card"><div class="staff-avatar">⚖️</div><div class="staff-name">شارلوك ⚖️ 🛡️</div><div class="staff-role">مقيّم معتمد</div></div>
-                            <div class="staff-card"><div class="staff-avatar">⚖️</div><div class="staff-name">مايكي ⚖️ 🛡️</div><div class="staff-role">مقيّم معتمد</div></div>
-                            <div class="staff-card"><div class="staff-avatar">⚖️</div><div class="staff-name">ريني ⚖️ 🛡️</div><div class="staff-role">مقيّم معتمد</div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <button class="carousel-btn c-next sound-btn" onclick="moveCarousel(1)">❮</button>
-        </div>
-    </div>
-
-    <div id="screen-explanation" class="screen">
+    <div id="screen-explanation" class="screen active">
         <h2 class="section-title">شـرح بـطـولـة كـأس الـجـحـيـم 👑📜</h2>
         <div class="explanation-container">
             <div class="exp-card"><h3><span>👑</span> المفهوم العام</h3><p>كأس الجحيم 👑 هو أحد الألقاب الرئيسية في الحسبة، ويُعرف بلقب المبدعين والموهوبين. ولحسم الفائز بهذا اللقب، تُقام بطولة كأس الجحيم؛ وهي بطولة تنافسية تجمع النقابات في سلسلة من المواجهات والتحديات بمختلف المجالات الإبداعية والثقافية والمهارية، بهدف اكتشاف وإبراز أفضل المواهب داخل كل نقابة. وفي ختام البطولة، تُتوَّج النقابة التي تثبت امتلاكها أقوى وأفضل المواهب بلقب كأس الجحيم 👑.</p></div>
@@ -218,11 +206,20 @@
         </div>
     </div>
 
+    <div id="screen-home" class="screen">
+        <div class="locked-fullscreen">
+            <div class="locked-icon">⚙️🔒</div>
+            <h2 class="hell-title" style="color:var(--magma-bright); font-size:2rem; margin-bottom:10px;">الرئيسية</h2>
+            <p style="color:var(--text-muted); font-size:1.1rem;">هذا القسم مغلق حالياً لإجراء أعمال الصيانة والتطوير.</p>
+        </div>
+    </div>
+
     <footer class="global-footer">
         <div class="dev-credit">الفكرة تحت إنشاء: <span>كرولو 🛡️</span> | تطوير: <span>لابوبو</span></div>
     </footer>
 
     <script>
+        // الرابط السحابي المركزي
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytFovnrks0AVfx4Kz2LfOg23PADB0PjothZKAsd5bmgzalG7-8OUdZCLg5w2ppx5pQ/exec"; 
 
         const defaultData = {
@@ -253,12 +250,12 @@
                 { id: 'm4', group: 'A', round: 2, t1: 'باليريون', em1:'📯', t2: 'فالهالا', em2:'🔱', time: 'لم تلعب بعد', status: 'بانتظار الإشارة ⚔️' },
                 { id: 'm5', group: 'A', round: 3, t1: 'الداما', em1:'🥂', t2: 'فالهالا', em2:'🔱', time: 'لم تلعب بعد', status: 'بانتظار الإشارة ⚔️' },
                 { id: 'm6', group: 'A', round: 3, t1: 'باليريون', em1:'📯', t2: 'سونلايت', em2:'🏮', time: 'لم تلعب بعد', status: 'بانتظار الإشارة ⚔️' },
-                { id: 'm7', group: 'B', round: 1, t1: 'سيريوس', em1:'🏹', t2: 'دريفت', em2:'🎻', time: 'لم تلعب بعد', status: 'بانتظار الإشارة ⚔️' },
-                { id: 'm8', group: 'B', round: 1, t1: 'كلوفر', em1:'⚔️♣️', t2: 'هاديس', em2:'💠', time: 'لم تلعب بعد', status: 'بانتظار الإشارة ⚔️' },
-                { id: 'm9', group: 'B', round: 2, t1: 'سيريوس', em1:'🏹', t2: 'كلوفر', em2:'⚔️♣️', time: 'لم تلعب بعد', status: 'بانتظار الإشارة ⚔️' },
-                { id: 'm10', group: 'B', round: 2, t1: 'دريفت', em1:'🎻', t2: 'هاديس', em2:'💠', time: 'لم تلعب بعد', status: 'بانتظار الإشارة ⚔️' },
-                { id: 'm11', group: 'B', round: 3, t1: 'سيريوس', em1:'🏹', t2: 'هاديس', em2:'💠', time: 'لم تلعب بعد', status: 'بانتظار الإشارة ⚔️' },
-                { id: 'm12', group: 'B', round: 3, t1: 'دريفت', em1:'🎻', t2: 'كلوفر', em2:'⚔️♣️', time: 'لم تلعب بعد', status: 'بانتظار الإشارة ⚔️' }
+                { id: 'm7', group: 'B', round: 1, t1: 'سيريوس', em1:'🏹', t2: 'دريفت', em2:'🎻', time: 'لم تلعب بعد', status: 'لم تلعب بعد' },
+                { id: 'm8', group: 'B', round: 1, t1: 'كلوفر', em1:'⚔️♣️', t2: 'هاديس', em2:'💠', time: 'لم تلعب بعد', status: 'لم تلعب بعد' },
+                { id: 'm9', group: 'B', round: 2, t1: 'سيريوس', em1:'🏹', t2: 'كلوفر', em2:'⚔️♣️', time: 'لم تلعب بعد', status: 'لم تلعب بعد' },
+                { id: 'm10', group: 'B', round: 2, t1: 'دريفت', em1:'🎻', t2: 'هاديس', em2:'💠', time: 'لم تلعب بعد', status: 'لم تلعب بعد' },
+                { id: 'm11', group: 'B', round: 3, t1: 'سيريوس', em1:'🏹', t2: 'هاديس', em2:'💠', time: 'لم تلعب بعد', status: 'لم تلعب بعد' },
+                { id: 'm12', group: 'B', round: 3, t1: 'دريفت', em1:'🎻', t2: 'كلوفر', em2:'⚔️♣️', time: 'لم تلعب بعد', status: 'لم تلعب بعد' }
             ]
         };
 
@@ -288,7 +285,7 @@
             const container = document.getElementById('guilds-container');
             container.innerHTML = '';
             db.guildsDisplay.forEach(g => {
-                container.innerHTML += `<div class="guild-card"><div class="guild-logo-container"><div style="font-size:2.5rem; filter:drop-shadow(0 0 10px rgba(255,102,0,0.5));">${g.emoji}</div></div><h3 class="guild-name">${g.name}</h3></div>`;
+                container.innerHTML += `<div class="guild-card"><div class="guild-logo-container"><div>${g.emoji}</div></div><h3 class="guild-name">${g.name}</h3></div>`;
             });
         }
 
@@ -332,25 +329,6 @@
             btnElement.classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-
-        let currentSlide = 0;
-        const track = document.getElementById('carouselTrack');
-        function moveCarousel(direction) {
-            const slides = document.querySelectorAll('.carousel-slide');
-            currentSlide += direction;
-            if(currentSlide >= slides.length) currentSlide = 0;
-            if(currentSlide < 0) currentSlide = slides.length - 1;
-            track.style.transform = `translateX(${currentSlide * 100}%)`;
-        }
-        let autoSlideInterval = setInterval(() => { moveCarousel(1); }, 5000);
-
-        let startX = 0, endX = 0;
-        const windowEl = document.getElementById('carouselWindow');
-        windowEl.addEventListener('touchstart', e => { clearInterval(autoSlideInterval); startX = e.touches[0].clientX; });
-        windowEl.addEventListener('touchend', e => { endX = e.changedTouches[0].clientX; handleSwipe(); autoSlideInterval = setInterval(() => { moveCarousel(1); }, 5000); });
-        windowEl.addEventListener('mousedown', e => { clearInterval(autoSlideInterval); startX = e.clientX; e.preventDefault(); });
-        windowEl.addEventListener('mouseup', e => { endX = e.clientX; handleSwipe(); autoSlideInterval = setInterval(() => { moveCarousel(1); }, 5000); });
-        function handleSwipe() { if (startX - endX > 50) moveCarousel(-1); if (endX - startX > 50) moveCarousel(1); }
 
         window.addEventListener('load', () => {
             loadScloudData();

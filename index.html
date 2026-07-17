@@ -111,10 +111,6 @@
         .team-mini-badge { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--magma-core); background: #000; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
         .points-col { color: var(--magma-bright); font-size: 1.2rem; font-family: 'Cinzel', serif; font-weight: 900; }
         
-        /* الشاشات المقفلة والصيانة */
-        .locked-fullscreen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px; text-align: center; }
-        .locked-icon { font-size: 5.5rem; filter: drop-shadow(0 0 20px var(--magma-core)); animation: shieldPulse 2s infinite alternate; margin-bottom: 20px; }
-        
         /* التجاوب مع الجوال */
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 12px; padding: 12px 20px; align-items: center; }
@@ -148,6 +144,7 @@
 <body>
     <audio id="clickSound" src="click.mp3" preload="auto"></audio>
     
+    <!-- شاشة التحميل -->
     <div id="loader">
         <div class="loader-shield">🛡️</div>
         <h1 class="loader-title hell-title" style="color: white; font-size: 2.2rem; margin-bottom: 15px; text-shadow: 0 0 10px var(--magma-core);">HELL CUP</h1>
@@ -156,6 +153,7 @@
     
     <div class="embers" id="embers-container"></div>
     
+    <!-- النافبار العلوي -->
     <header>
         <a href="#" class="logo-area hell-title"><img src="hell-logo.png" alt="Logo" class="logo-image" onerror="this.style.display='none'"> HELL CUP</a>
         <nav>
@@ -163,11 +161,10 @@
             <button class="nav-btn sound-btn" onclick="switchScreen('screen-guilds', this)">النقابات</button>
             <button class="nav-btn sound-btn" onclick="switchScreen('screen-rounds', this)">المواجهات</button>
             <button class="nav-btn sound-btn" onclick="switchScreen('screen-standings', this)">الدوري</button>
-            <button class="nav-btn sound-btn" onclick="switchScreen('screen-royal', this)">الحسبة الملكية</button>
-            <button class="nav-btn sound-btn" onclick="switchScreen('screen-home', this)">الرئيسية</button>
         </nav>
     </header>
 
+    <!-- الشاشة الأولى: شرح الكأس (الافتراضية الآن) -->
     <div id="screen-explanation" class="screen active">
         <h2 class="section-title">شـرح بـطـولـة كـأس الـجـحـيـم 👑📜</h2>
         <div class="explanation-container">
@@ -180,38 +177,25 @@
         </div>
     </div>
 
+    <!-- الشاشة الثانية: النقابات المشاركة -->
     <div id="screen-guilds" class="screen">
         <h2 class="section-title">النقابات المشاركة</h2>
         <div class="guilds-grid" id="guilds-container"></div>
     </div>
 
+    <!-- الشاشة الثالثة: المواجهات -->
     <div id="screen-rounds" class="screen">
         <h2 class="section-title">ساحة المواجهات النارية</h2>
         <div class="rounds-container" id="matches-container"></div>
     </div>
 
+    <!-- الشاشة الرابعة: الدوري والترتيب -->
     <div id="screen-standings" class="screen">
         <h2 class="section-title">جدول ترتيب النقابات</h2>
         <h3 class="grp-header">المجموعة A</h3>
         <div class="table-area"><table class="standings-table"><thead><tr><th>النقابة</th><th>لعب</th><th>فاز</th><th>تعادل</th><th>خسر</th><th>النقاط</th></tr></thead><tbody id="table-group-a"></tbody></table></div>
         <h3 class="grp-header">المجموعة B</h3>
         <div class="table-area"><table class="standings-table"><thead><tr><th>النقابة</th><th>لعب</th><th>فاز</th><th>تعادل</th><th>خسر</th><th>النقاط</th></tr></thead><tbody id="table-group-b"></tbody></table></div>
-    </div>
-
-    <div id="screen-royal" class="screen">
-        <div class="locked-fullscreen">
-            <div class="locked-icon">👑🔒</div>
-            <h2 class="hell-title" style="color:var(--magma-bright); font-size:2rem; margin-bottom:10px;">حـسـبـة الـجـحـيـم</h2>
-            <p style="color:var(--text-muted); font-size:1.1rem;">هذا القسم الملكي مغلق حالياً بأمر من مجلس الإدارة العليا.</p>
-        </div>
-    </div>
-
-    <div id="screen-home" class="screen">
-        <div class="locked-fullscreen">
-            <div class="locked-icon">⚙️🔒</div>
-            <h2 class="hell-title" style="color:var(--magma-bright); font-size:2rem; margin-bottom:10px;">الرئيسية</h2>
-            <p style="color:var(--text-muted); font-size:1.1rem;">هذا القسم مغلق حالياً لإجراء أعمال الصيانة والتطوير.</p>
-        </div>
     </div>
 
     <footer class="global-footer">

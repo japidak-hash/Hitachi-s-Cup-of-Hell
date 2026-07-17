@@ -111,6 +111,10 @@
         .team-mini-badge { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--magma-core); background: #000; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
         .points-col { color: var(--magma-bright); font-size: 1.2rem; font-family: 'Cinzel', serif; font-weight: 900; }
         
+        /* الشاشات المقفلة والصيانة */
+        .locked-fullscreen { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px; text-align: center; }
+        .locked-icon { font-size: 5.5rem; filter: drop-shadow(0 0 20px var(--magma-core)); animation: shieldPulse 2s infinite alternate; margin-bottom: 20px; }
+        
         /* التجاوب مع الجوال */
         @media (max-width: 768px) {
             header { flex-direction: column; gap: 12px; padding: 12px 20px; align-items: center; }
@@ -164,7 +168,7 @@
         </nav>
     </header>
 
-    <!-- الشاشة الأولى: شرح الكأس (الافتراضية الآن) -->
+    <!-- الشاشة الأولى: شرح الكأس (الافتراضية) -->
     <div id="screen-explanation" class="screen active">
         <h2 class="section-title">شـرح بـطـولـة كـأس الـجـحـيـم 👑📜</h2>
         <div class="explanation-container">
@@ -209,9 +213,7 @@
         const defaultData = {
             guildsDisplay: [
                 { name: 'الداما', emoji: '🥂' }, { name: 'باليريون', emoji: '📯' }, { name: 'سونلايت', emoji: '🏮' }, { name: 'فالهالا', emoji: '🔱' },
-                { name: 'سيريوس', emoji: '🏹' }, { name: 'دريفت', emoji: '🎻' }, { name: 'كلوفر', emoji: '⚔️♣️' }, { name: 'هاديس', emoji: '💠' },
-                { name: 'مجهول', emoji: '⁉️' }, { name: 'مجهول', emoji: '⁉️' }, { name: 'مجهول', emoji: '⁉️' },
-                { name: 'مجهول', emoji: '⁉️' }, { name: 'مجهول', emoji: '⁉️' }, { name: 'مجهول', emoji: '⁉️' }
+                { name: 'سيريوس', emoji: '🏹' }, { name: 'دريفت', emoji: '🎻' }, { name: 'كلوفر', emoji: '⚔️♣️' }, { name: 'هاديس', emoji: '💠' }
             ],
             standings: {
                 A: [
